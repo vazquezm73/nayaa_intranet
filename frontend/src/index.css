@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: #f1f5f9; /* brand-bg aproximado */
+}
+
+/* Borra cualquier @layer utilities que tenga .text-white o bg-white forzado */
