@@ -30,7 +30,27 @@ exports.createUser = async (req, res) => {
 };
 
 // Actualizar usuario o cambiar estado activo/inactivo
-updateUser;
+exports.updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = { ...req.body };
+
+    // SEGURIDAD: Bloqueo de autodesactivación con mensaje personalizado
+    if (id === req.user._id.toString() && data.active === false) {
+      return res.status(400).json({
+        message: "No se puede deshabilitar el administrador del Sistema",
+      });
+    }
+
+    delete data.password;
+    const updatedUser = await User.findByIdAndUpdate(id, data, {
+      new: true,
+    }).select("-password");
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar usuario", error });
+  }
+};
 
 // Cambiar contraseña (Solo Admin)
 exports.resetPassword = async (req, res) => {
