@@ -33,16 +33,17 @@ exports.getClients = async (req, res) => {
 };
 
 // Crear un nuevo cliente
+
 exports.createClient = async (req, res) => {
   try {
     const data = { ...req.body };
 
-    // Si viene vacío, convertir a null
-    if (data.rfcTaxId === "" || data.rfcTaxId === undefined) {
+    // ✅ Validación robusta: Si no existe, es null o es solo espacios, lo dejamos como null
+    if (!data.rfcTaxId || data.rfcTaxId.toString().trim() === "") {
       data.rfcTaxId = null;
     } else {
-      // Normalizar si existe
-      data.rfcTaxId = data.rfcTaxId.trim().toUpperCase();
+      // ✅ Solo hacemos trim si estamos seguros de que es un string con contenido
+      data.rfcTaxId = data.rfcTaxId.toString().trim().toUpperCase();
     }
 
     const nuevoCliente = new Client({
@@ -51,17 +52,29 @@ exports.createClient = async (req, res) => {
     });
 
     await nuevoCliente.save();
-    res.status(201).json(nuevoCliente);
+
+    // ✅ Usamos return para asegurarnos de que la función termine aquí
+    return res.status(201).json(nuevoCliente);
   } catch (error) {
+    console.error("❌ ERROR EN CREATE_CLIENT:", error);
+
+    // Si el error es por el índice único que mencionamos antes (nombre o rfc)
     if (error.code === 11000) {
       return res.status(400).json({
-        message: "El RFC/TaxID ya está registrado",
+        message: "Ya existe un registro con ese dato duplicado (RFC o Nombre)",
+        details: error.keyValue,
       });
     }
-    res.status(500).json({ message: "Error al crear cliente", error });
+
+    // Evitamos enviar doble respuesta si ya se envió una
+    if (!res.headersSent) {
+      return res.status(500).json({
+        message: "Error al crear cliente",
+        error: error.message,
+      });
+    }
   }
 };
-
 // Obtener un cliente específico por ID
 exports.getClientById = async (req, res) => {
   try {
