@@ -11,7 +11,7 @@ const clientRoutes = require("./src/routes/clientRoutes");
 const assetRoutes = require("./src/routes/assetRoutes");
 const contractRoutes = require("./src/routes/contractRoutes");
 const userRoutes = require("./src/routes/userRoutes");
-
+require("./src/services/alertService"); // Solo impórtalo para activar el cron
 // Conectar a la base de datos
 connectDB();
 

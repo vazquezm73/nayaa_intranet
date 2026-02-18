@@ -59,10 +59,12 @@ const AssetSchema = new mongoose.Schema(
     costoMensual: {
       type: Number,
       default: 0,
+      set: (v) => (v === "" || v === null ? 0 : v), // Si llega vacío, forzar 0
     },
     costoAnual: {
       type: Number,
       default: 0,
+      set: (v) => (v === "" || v === null ? 0 : v),
     },
     moneda: {
       type: String,
@@ -77,6 +79,11 @@ const AssetSchema = new mongoose.Schema(
     },
     observaciones: {
       type: String,
+    },
+    externalId: {
+      type: String,
+      unique: true,
+      sparse: true,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,4 +1,6 @@
 const Asset = require("../models/Asset");
+const { checkExpirations } = require("../services/alertService");
+const { syncContaboAssets } = require("../services/contaboService");
 
 exports.getAssets = async (req, res) => {
   try {
@@ -80,5 +82,36 @@ exports.deleteAsset = async (req, res) => {
     res.json({ message: "Activo desactivado correctamente" });
   } catch (error) {
     res.status(500).json({ message: "Error al eliminar activo" });
+  }
+};
+
+exports.testAlerts = async (req, res) => {
+  try {
+    // Llamamos a la función que creamos en el servicio
+    await checkExpirations();
+    res.json({
+      message: "Proceso de alertas disparado. Revisa Telegram y Email.",
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error al probar alertas", error: error.message });
+  }
+};
+
+exports.syncContabo = async (req, res) => {
+  try {
+    const result = await syncContaboAssets();
+    res.json({
+      message: "Sincronización completada con éxito",
+      details: result,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message: "Error al sincronizar con Contabo",
+        error: error.message,
+      });
   }
 };

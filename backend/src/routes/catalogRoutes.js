@@ -5,8 +5,6 @@ const { protect } = require("../middlewares/auth");
 const { authorize } = require("../middlewares/roleCheck");
 
 // Todos los usuarios autenticados pueden ver catálogos
-router.get("/", protect, catalogController.getCatalogs);
-
 // Solo administradores pueden gestionar la estructura
 router.get("/", protect, catalogController.getCatalogs);
 router.post("/", protect, authorize("admin"), catalogController.createCatalog);
