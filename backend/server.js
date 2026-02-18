@@ -12,6 +12,7 @@ const assetRoutes = require("./src/routes/assetRoutes");
 const contractRoutes = require("./src/routes/contractRoutes");
 const userRoutes = require("./src/routes/userRoutes");
 require("./src/services/alertService"); // Solo impórtalo para activar el cron
+const serverAccessRoutes = require("./src/routes/serverAccessRoutes");
 // Conectar a la base de datos
 connectDB();
 
@@ -52,6 +53,7 @@ app.use("/api/clients", clientRoutes);
 app.use("/api/assets", assetRoutes);
 app.use("/api/contracts", contractRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/server-access", serverAccessRoutes);
 
 // --- SERVIDO DE ARCHIVOS ESTÁTICOS Y SPA ---
 if (config.env === "development") {

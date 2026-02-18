@@ -13,6 +13,8 @@ import AdminPanel from "./modules/admin/AdminPanel"; // Este es el que sugerimos
 import CatalogManager from "./modules/admin/CatalogManager";
 import ContratosModule from "./modules/contratos/index";
 import UserList from "./modules/admin/UserList";
+import ConfigPanel from "./modules/config/ConfigPanel";
+import ServerAccessList from "./modules/config/ServerAccessList";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -113,6 +115,27 @@ function App() {
             token ? (
               <MainLayout title="Configuración de Usuarios">
                 <UserList />
+              </MainLayout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/admin/config"
+          element={
+            <MainLayout title="Configuración del Sistema">
+              <ConfigPanel />
+            </MainLayout>
+          }
+        />
+        {/* PANEL CONFIGURACIÓN: El menú intermedio para Usuarios y Accesos */}
+        <Route
+          path="/admin/server-access"
+          element={
+            token ? (
+              <MainLayout title="Configuración del Sistema">
+                <ServerAccessList />
               </MainLayout>
             ) : (
               <Navigate to="/login" />

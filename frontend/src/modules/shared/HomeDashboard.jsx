@@ -56,8 +56,8 @@ const HomeDashboard = () => {
         title="Configuración"
         icon={Settings}
         color="bg-slate-600"
-        description="Gestión de catálogos y parámetros del sistema."
-        link="/admin/users"
+        description="Parámetros del sistema."
+        link="/admin/config"
       />
     </div>
   );
